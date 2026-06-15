@@ -110,6 +110,15 @@ HTML = f"""<!doctype html>
     .card2 .ba {{ display:inline-block; width:auto; }}
     .card2 .ba__before img {{ width:auto; height:auto; max-height:90vh; max-width:96vw; }}
   }}
+  /* MOBILE expand: full-screen, edge-to-edge — the in-page card already fills
+     most of the width, so this is the largest a phone can show the comparison. */
+  @media(max-width:639px){{
+    .modal {{ padding:0; }}
+    .modal__content {{ width:100vw; max-width:100vw; }}
+    .card2 {{ overflow:hidden; max-height:100vh; border-radius:0; width:100vw; }}
+    .card2 .ba__before img {{ width:100vw; height:auto; }}
+    .modal__close {{ position:fixed; top:10px; right:12px; background:rgba(15,23,42,.55); padding:6px 10px; border-radius:8px; z-index:5; }}
+  }}
   .resizehint {{ text-align:center; font-size:12px; color:#94a3b8; margin-top:10px; }}
 
   /* ---------- downloads ---------- */
