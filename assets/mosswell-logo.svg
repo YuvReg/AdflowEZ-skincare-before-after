@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 96" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Mosswell Skincare</title>
+  <defs>
+    <linearGradient id="brass" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#B38346"/>
+      <stop offset="1" stop-color="#7F5427"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#brass)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 14c18 10 31 28 31 49 0 14-8 24-22 24-13 0-22-9-22-22 0-15 11-26 27-31"/>
+    <path d="M27 21v61h30"/>
+    <path d="M76 20v62"/>
+  </g>
+  <g fill="#151412">
+    <text x="118" y="47" font-family="Georgia, 'Times New Roman', serif" font-size="31" font-weight="700">MOSSWELL</text>
+    <text x="119" y="75" font-family="Segoe UI, Arial, sans-serif" font-size="13">SKINCARE</text>
+  </g>
+</svg>

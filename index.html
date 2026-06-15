@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mosswell Before and After Slider</title>
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body class="demo-body">
+    <header class="demo-header">
+      <a class="demo-mark" href="#" aria-label="Mosswell Skincare">
+        <img src="assets/mosswell-logo.svg" alt="Mosswell Skincare">
+      </a>
+    </header>
+
+    <main class="demo-main">
+      <div class="demo-toolbar">
+        <div class="demo-title">
+          <h1 class="display">Product page before and after</h1>
+          <p>One skincare PDP, rebuilt for sharper product storytelling, clearer checkout intent, and clean desktop and mobile presentation.</p>
+        </div>
+        <div class="mode-switch" role="group" aria-label="Viewport">
+          <button class="mode-button" type="button" data-mode="desktop" aria-pressed="true">Desktop</button>
+          <button class="mode-button" type="button" data-mode="mobile" aria-pressed="false">Mobile</button>
+        </div>
+        <button class="expand-button" type="button" data-expand>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Expand
+        </button>
+      </div>
+
+      <section class="comparison-shell" aria-label="Before and after comparison">
+        <div class="comparison-caption">
+          <span class="comparison-tag before">Original product page</span>
+          <span class="comparison-tag after">AdflowEZ rebuild</span>
+        </div>
+        <div class="comparison-stage" data-comparison>
+          <img class="comparison-after" src="screenshots/after-desktop.png" alt="AdflowEZ rebuilt desktop product page">
+          <img class="comparison-before" src="screenshots/before-desktop.png" alt="Original desktop product page">
+          <span class="comparison-divider" aria-hidden="true"></span>
+          <span class="comparison-handle" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="m9 7-5 5 5 5M15 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <input class="comparison-range" type="range" min="0" max="100" value="50" aria-label="Reveal original or rebuilt page">
+        </div>
+        <div class="demo-status">
+          <span data-mode-label>Desktop comparison</span>
+          <span data-position-label>Slider at 50%</span>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" data-modal aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-bar">
+          <strong id="modal-title">Expanded comparison</strong>
+          <button class="close-button" type="button" data-close aria-label="Close expanded comparison">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="comparison-caption">
+          <span class="comparison-tag before">Original product page</span>
+          <span class="comparison-tag after">AdflowEZ rebuild</span>
+        </div>
+        <div class="comparison-stage" data-comparison-modal>
+          <img class="comparison-after" src="screenshots/after-desktop.png" alt="AdflowEZ rebuilt product page expanded">
+          <img class="comparison-before" src="screenshots/before-desktop.png" alt="Original product page expanded">
+          <span class="comparison-divider" aria-hidden="true"></span>
+          <span class="comparison-handle" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="m9 7-5 5 5 5M15 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <input class="comparison-range" type="range" min="0" max="100" value="50" aria-label="Reveal original or rebuilt page in expanded view">
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/demo.js"></script>
+  </body>
+</html>

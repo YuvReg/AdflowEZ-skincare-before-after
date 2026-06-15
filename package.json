@@ -1,0 +1,17 @@
+{
+  "name": "adflowez-skincare-before-after",
+  "version": "1.0.0",
+  "description": "Self-contained product-page before/after demo for AdflowEZ.",
+  "main": "index.js",
+  "scripts": {
+    "capture": "node scripts/capture-screenshots.js",
+    "validate": "node scripts/validate-demo.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}

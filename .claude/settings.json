@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/review-capture.js desktop)",
+      "WebSearch",
+      "Bash(echo \"=== C:/ root ===\" ; ls -1 /c/ 2>/dev/null | head -50 *)",
+      "Read(//c//**)",
+      "Read(//c/Users/yuval/**)",
+      "Bash(find /c/Users/yuval -maxdepth 3 -iname \"*shopify*\" \\\\\\( -type d -o -name \"*.md\" -o -name \"*.js\" -o -name \"*.py\" -o -name \"*.sh\" \\\\\\) 2>/dev/null | grep -iv node_modules | head -40 *)",
+      "Bash(python -c ' *)",
+      "PowerShell(gh --version)",
+      "PowerShell(gh auth status)"
+    ]
+  }
+}
