@@ -63,16 +63,14 @@ HTML = f"""<!doctype html>
   ol.steps {{ margin:0; padding-left:20px; font-size:14px; line-height:1.8; }}
   ol.steps code {{ background:#f1f5f9; padding:1px 6px; border-radius:4px; font-size:12.5px; }}
 
-  /* ---------- the live slider ---------- */
+  /* ---------- the live slider (shows the FULL product view, no cropping) ---------- */
   .card {{ border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; max-width:560px; margin:0 auto; }}
-  .ba {{ position:relative; width:100%; aspect-ratio:4/5; overflow:hidden;
-         user-select:none; -webkit-user-select:none; cursor:default;
-         background:rgba(148,163,184,.3); }}
-  @media(min-width:640px){{ .ba {{ aspect-ratio:16/9; }} }}
-  .ba picture, .ba img {{ position:absolute; inset:0; width:100%; height:100%; }}
-  .ba img {{ object-fit:cover; object-position:top center; pointer-events:none; }}
+  .ba {{ position:relative; width:100%; user-select:none; -webkit-user-select:none; cursor:default; background:#fff; }}
+  .ba__before {{ display:block; }}
+  .ba__before img {{ display:block; width:100%; height:auto; pointer-events:none; }}
   /* AFTER wipes in from the LEFT: handle far-left = all Before, far-right = all After. */
   .ba__after {{ position:absolute; inset:0; clip-path:inset(0 50% 0 0); }}
+  .ba__after img {{ display:block; width:100%; height:auto; pointer-events:none; }}
   .ba__line {{ position:absolute; top:0; bottom:0; width:2px; background:#fff;
                box-shadow:0 0 4px rgba(0,0,0,.3); left:50%; pointer-events:none; transform:translateX(-50%); }}
   .ba__handle {{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -97,7 +95,7 @@ HTML = f"""<!doctype html>
   .modal__content {{ position:relative; width:100%; max-width:1200px; }}
   .modal__close {{ position:absolute; top:-40px; right:0; background:none; border:none; color:#fff; font-size:14px;
                    font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; }}
-  .card2 {{ border-radius:12px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.5); }}
+  .card2 {{ border-radius:12px; overflow:auto; max-height:88vh; box-shadow:0 20px 60px rgba(0,0,0,.5); }}
   .resizehint {{ text-align:center; font-size:12px; color:#94a3b8; margin-top:10px; }}
 
   /* ---------- downloads ---------- */
@@ -129,13 +127,11 @@ HTML = f"""<!doctype html>
     <div class="card">
       <div class="ba" id="ba">
         <picture class="ba__before">
-          <source media="(min-width:640px)" srcset="{imgs['bd']}">
-          <img src="{imgs['bm']}" alt="Mosswell original product page">
+          <img src="{imgs['bd']}" alt="Mosswell original product page">
         </picture>
         <div class="ba__after" id="baAfter">
           <picture>
-            <source media="(min-width:640px)" srcset="{imgs['ad']}">
-            <img src="{imgs['am']}" alt="Mosswell AdflowEZ rebuild">
+            <img src="{imgs['ad']}" alt="Mosswell AdflowEZ rebuild">
           </picture>
         </div>
         <div class="ba__line" id="baLine"></div>
@@ -150,12 +146,16 @@ HTML = f"""<!doctype html>
         </div>
         <div class="ba__tag ba__tag--before">Before</div>
         <div class="ba__tag ba__tag--after">After</div>
-        <button class="ba__expand" id="baExpand" aria-label="Expand to a larger view">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>
-        </button>
       </div>
     </div>
-    <p class="resizehint">Tip: drag the blue circle (only the circle moves it). Click the ⤢ button to expand. Narrow the window to see the mobile layout.</p>
+    <div style="text-align:center;margin-top:12px">
+      <button class="btn" id="baExpand" aria-label="Open a larger view"
+              style="display:inline-flex;align-items:center;gap:8px;background:#fffdf8;color:#0f172a;border:1px solid #e2e8f0">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>
+        View larger
+      </button>
+    </div>
+    <p class="resizehint">Drag the blue circle to compare (only the circle moves it). Narrow the window to see the mobile layout.</p>
   </div>
 
   <!-- EXPAND POPUP -->

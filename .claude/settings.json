@@ -9,7 +9,10 @@
       "Bash(find /c/Users/yuval -maxdepth 3 -iname \"*shopify*\" \\\\\\( -type d -o -name \"*.md\" -o -name \"*.js\" -o -name \"*.py\" -o -name \"*.sh\" \\\\\\) 2>/dev/null | grep -iv node_modules | head -40 *)",
       "Bash(python -c ' *)",
       "PowerShell(gh --version)",
-      "PowerShell(gh auth status)"
+      "PowerShell(gh auth status)",
+      "PowerShell(node scripts/mobile-review.js)",
+      "Bash(node scripts/mobile-review.js)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}, %{size_download} bytes\\\\n\" https://2dacf659fc29d7.lhr.life/mosswell-slider-handoff.html)"
     ]
   }
 }

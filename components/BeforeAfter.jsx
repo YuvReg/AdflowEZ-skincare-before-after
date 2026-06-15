@@ -35,7 +35,7 @@ function Picture({ desktop, mobile, alt }) {
         src={mobile || desktop}
         alt={alt}
         draggable={false}
-        className="absolute inset-0 w-full h-full object-cover object-top"
+        className="block w-full h-auto"
       />
     </picture>
   );
@@ -151,7 +151,7 @@ export default function BeforeAfter(props) {
     return () => { document.removeEventListener('keydown', onEsc); document.body.style.overflow = prev; };
   }, [open]);
 
-  const frame = 'aspect-[4/5] sm:aspect-video';
+  const frame = '';   // height comes from the full image (no cropping)
 
   return (
     <>
