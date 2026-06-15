@@ -66,9 +66,10 @@ HTML = f"""<!doctype html>
 
   /* ---------- the live slider: fixed-aspect frame (4:5 mobile / 16:9 desktop) ---------- */
   .card {{ border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; max-width:560px; margin:0 auto; }}
+  @media(min-width:640px){{ .card {{ max-width:720px; }} }}
   .ba {{ position:relative; width:100%; overflow:hidden; aspect-ratio:4/5; background:#fff;
          user-select:none; -webkit-user-select:none; cursor:default; }}
-  @media(min-width:640px){{ .ba {{ aspect-ratio:16/9; }} }}
+  @media(min-width:640px){{ .ba {{ aspect-ratio:1280/670; }} }}
   .ba__before {{ position:absolute; inset:0; display:block; }}
   /* AFTER wipes in from the LEFT: handle far-left = all Before, far-right = all After. */
   .ba__after {{ position:absolute; inset:0; clip-path:inset(0 50% 0 0); }}
@@ -91,6 +92,10 @@ HTML = f"""<!doctype html>
   .ba__tag {{ position:absolute; top:12px; font-size:12px; font-weight:600; padding:4px 10px; border-radius:6px; color:#fff; pointer-events:none; }}
   .ba__tag--before {{ left:12px; background:rgba(0,0,0,.5); }}
   .ba__tag--after  {{ right:12px; background:var(--blue); }}
+  .ba__expand {{ position:absolute; bottom:12px; left:12px; width:38px; height:38px; border-radius:9px;
+                 background:rgba(255,255,255,.92); border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,.18);
+                 display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:4; }}
+  .ba__expand:hover {{ background:#fff; }}
 
   .modal {{ position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; padding:24px; z-index:1000; }}
   .modal.open {{ display:flex; }}
@@ -102,7 +107,7 @@ HTML = f"""<!doctype html>
   @media(min-width:640px){{
     .modal__content {{ width:min(1200px, 96vw); max-width:96vw; }}
     .card2 {{ width:100%; margin:0 auto; }}
-    .card2 .ba {{ aspect-ratio:16/9; width:100%; height:auto; max-height:86vh; }}
+    .card2 .ba {{ aspect-ratio:1280/670; width:100%; height:auto; max-height:86vh; }}
   }}
   /* MOBILE expand: full-width 4:5, edge-to-edge, nothing cut. */
   @media(max-width:639px){{
@@ -168,16 +173,12 @@ HTML = f"""<!doctype html>
         </div>
         <div class="ba__tag ba__tag--before">Before</div>
         <div class="ba__tag ba__tag--after">After</div>
+        <button class="ba__expand" id="baExpand" type="button" aria-label="Open a larger view">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>
+        </button>
       </div>
     </div>
-    <div style="text-align:center;margin-top:12px">
-      <button class="btn" id="baExpand" aria-label="Open a larger view"
-              style="display:inline-flex;align-items:center;gap:8px;background:#fffdf8;color:#0f172a;border:1px solid #e2e8f0">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>
-        View larger
-      </button>
-    </div>
-    <p class="resizehint">Drag the blue circle to compare (only the circle moves it). Narrow the window to see the mobile layout.</p>
+    <p class="resizehint">Drag the blue circle to compare. Click the expand icon (bottom-left) to open a larger view. Narrow the window to see the mobile layout.</p>
   </div>
 
   <!-- EXPAND POPUP -->

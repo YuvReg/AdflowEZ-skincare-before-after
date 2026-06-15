@@ -11,7 +11,7 @@ const root = path.resolve(__dirname, "..");
 const screenshots = path.join(root, "screenshots");
 
 const sizes = [
-  { width: 1280, height: 720, suffix: "desktop" }, // 16:9
+  { width: 1280, height: 670, suffix: "desktop" }, // 1280:670 (full-homepage reference)
   { width: 390, height: 488, suffix: "mobile" },   // 4:5
 ];
 const comps = [
