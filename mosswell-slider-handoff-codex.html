@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mosswell Before/After - Codex fixed handoff</title>
+<style>
+  :root {
+    --bg: #f3f7f3;
+    --surface: #fffdfa;
+    --surface-strong: #ffffff;
+    --ink: #17211d;
+    --muted: #64716b;
+    --line: #d9e1dc;
+    --accent: #3b7cf4;
+    --sage: #5f8f78;
+    --rose: #d98b78;
+    --shadow: 0 18px 50px rgba(31, 49, 42, 0.14);
+  }
+
+  * {
+    box-sizing: border-box;
+    letter-spacing: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 16% 10%, rgba(95, 143, 120, 0.16), transparent 26%),
+      linear-gradient(135deg, #eef5f0 0%, var(--bg) 48%, #f9f1ec 100%);
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  .app {
+    min-height: calc(100dvh - 48px);
+    display: grid;
+    align-items: center;
+  }
+
+  .demo {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .panel,
+  .side {
+    border: 1px solid rgba(217, 225, 220, 0.95);
+    border-radius: 8px;
+    background: rgba(255, 253, 250, 0.94);
+    box-shadow: var(--shadow);
+  }
+
+  .panel {
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .mast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.1;
+    font-weight: 760;
+  }
+
+  .subtitle {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .badge {
+    flex: 0 0 auto;
+    border: 1px solid #b9d2c2;
+    background: #eef7f0;
+    color: #315342;
+    border-radius: 999px;
+    padding: 7px 11px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .compare-shell {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+  }
+
+  .compare {
+    --pos: 50;
+    width: min(100%, calc((100dvh - 220px) * 1.6), 880px);
+    position: relative;
+    isolation: isolate;
+  }
+
+  .compare__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .compare__layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  .compare__layer--after {
+    z-index: 2;
+  }
+
+  .art,
+  .art svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .art svg {
+    display: block;
+  }
+
+  .art--mobile {
+    display: none;
+  }
+
+  .compare__line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    z-index: 3;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 0 0 1px rgba(23, 33, 29, 0.12), 0 0 12px rgba(23, 33, 29, 0.24);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .compare__tag {
+    position: absolute;
+    top: 12px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 11px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 780;
+    pointer-events: none;
+  }
+
+  .compare__tag--before {
+    left: 12px;
+    background: rgba(23, 33, 29, 0.64);
+  }
+
+  .compare__tag--after {
+    right: 12px;
+    background: var(--accent);
+  }
+
+  .compare__handle {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--accent);
+    box-shadow: 0 10px 24px rgba(31, 49, 42, 0.24);
+    cursor: grab;
+    touch-action: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .compare__handle:active {
+    cursor: grabbing;
+  }
+
+  .compare__handle::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border: 2px solid rgba(59, 124, 244, 0.26);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .compare__handle:focus-visible,
+  .tool:focus-visible,
+  .close:focus-visible {
+    outline: 3px solid rgba(59, 124, 244, 0.7);
+    outline-offset: 3px;
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+  }
+
+  .tool,
+  .close {
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    display: inline-grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+  }
+
+  .tool:hover,
+  .close:hover {
+    background: #f8fbf8;
+    border-color: #b9c9c0;
+  }
+
+  .tool:active,
+  .close:active {
+    transform: scale(0.97);
+  }
+
+  .readout {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    padding: 0 14px;
+    color: #405049;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .side {
+    padding: 18px;
+    display: grid;
+    align-content: center;
+    gap: 14px;
+  }
+
+  .side h2 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .side p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .checklist {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checklist li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 8px;
+    align-items: start;
+    color: #33423c;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .checklist svg {
+    margin-top: 2px;
+    color: var(--sage);
+  }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(14, 20, 18, 0.76);
+  }
+
+  .modal.is-open {
+    display: flex;
+  }
+
+  .modal__surface {
+    width: min(96vw, 1320px);
+    max-height: calc(100dvh - 36px);
+    display: grid;
+    gap: 12px;
+  }
+
+  .modal__bar {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: #fff;
+  }
+
+  .modal__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 760;
+  }
+
+  .modal__tools {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .modal .tool,
+  .modal .close {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+
+  .modal .tool:hover,
+  .modal .close:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .modal .readout {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+
+  .modal .compare {
+    width: min(96vw, calc((100dvh - 110px) * 1.6), 1280px);
+  }
+
+  @media (max-width: 760px) {
+    body {
+      padding: 14px;
+    }
+
+    .app {
+      min-height: calc(100dvh - 28px);
+    }
+
+    .demo {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 10px;
+    }
+
+    .panel {
+      padding: 14px;
+      gap: 12px;
+    }
+
+    .mast {
+      align-items: flex-start;
+    }
+
+    .title {
+      font-size: 26px;
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      font-size: 15px;
+    }
+
+    .badge {
+      display: none;
+    }
+
+    .compare {
+      width: min(100%, calc((100dvh - 278px) * 0.75), 360px);
+    }
+
+    .compare__media {
+      aspect-ratio: 3 / 4;
+    }
+
+    .art--desktop {
+      display: none;
+    }
+
+    .art--mobile {
+      display: block;
+    }
+
+    .compare__tag {
+      top: 10px;
+      min-height: 34px;
+      font-size: 14px;
+    }
+
+    .compare__handle {
+      width: 58px;
+      height: 58px;
+    }
+
+    .side {
+      display: none;
+    }
+
+    .toolbar {
+      gap: 8px;
+    }
+
+    .readout {
+      font-size: 13px;
+      padding: 0 10px;
+    }
+
+    .modal {
+      padding: 12px;
+    }
+
+    .modal__surface {
+      width: min(96vw, 520px);
+      max-height: calc(100dvh - 24px);
+      gap: 10px;
+    }
+
+    .modal__title {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .modal__bar {
+      justify-content: flex-end;
+    }
+
+    .modal .compare {
+      width: min(96vw, calc((100dvh - 102px) * 0.75), 520px);
+    }
+
+    .modal .compare__media {
+      aspect-ratio: 3 / 4;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .title {
+      font-size: 23px;
+    }
+
+    .subtitle {
+      display: none;
+    }
+
+    .compare {
+      width: min(100%, calc((100dvh - 212px) * 0.75), 340px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool,
+    .close {
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="app" id="app">
+  <section class="demo" aria-labelledby="pageTitle">
+    <div class="panel">
+      <header class="mast">
+        <div>
+          <h1 class="title" id="pageTitle">Mosswell Before/After</h1>
+          <p class="subtitle">A viewport-fitted comparison build for desktop and mobile.</p>
+        </div>
+        <span class="badge">Codex fixed</span>
+      </header>
+
+      <div class="compare-shell">
+        <div class="compare" data-compare="main">
+          <div class="compare__media" data-media>
+            <div class="compare__layer compare__layer--before" aria-hidden="true">
+              <div class="art-slot" data-art-slot="before"></div>
+            </div>
+            <div class="compare__layer compare__layer--after" data-after aria-hidden="true">
+              <div class="art-slot" data-art-slot="after"></div>
+            </div>
+            <div class="compare__line" data-line></div>
+            <div class="compare__tag compare__tag--before">Before</div>
+            <div class="compare__tag compare__tag--after">After</div>
+          </div>
+          <button class="compare__handle" type="button" data-handle role="slider" aria-label="Before and after reveal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent after">
+            <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 7L3 12l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 7l5 5-5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 4v16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="toolbar" aria-label="Comparison controls">
+          <button class="tool" type="button" data-reset="main" aria-label="Reset comparison" title="Reset comparison">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5.6 13A7 7 0 1 0 7.7 6.2L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <output class="readout" data-readout="main">50% after</output>
+          <button class="tool" type="button" data-open-modal aria-label="Open full comparison" title="Open full comparison">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="side" aria-label="Build notes">
+      <h2>Codex duplicate</h2>
+      <p>This version keeps the comparison image fully visible in both frames and removes the heavy duplicate image payload.</p>
+      <ul class="checklist">
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Viewport-constrained normal and full views</span>
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Keyboard controls without page jump</span>
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Dialog focus stays inside the full view</span>
+        </li>
+      </ul>
+    </aside>
+  </section>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+  <div class="modal__surface">
+    <div class="modal__bar">
+      <h2 class="modal__title" id="modalTitle">Full comparison</h2>
+      <div class="modal__tools">
+        <button class="tool" type="button" data-reset="modal" aria-label="Reset comparison" title="Reset comparison">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.6 13A7 7 0 1 0 7.7 6.2L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <output class="readout" data-readout="modal">50% after</output>
+        <button class="close" type="button" data-close-modal aria-label="Close full comparison" title="Close full comparison">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="compare" data-compare="modal">
+      <div class="compare__media" data-media>
+        <div class="compare__layer compare__layer--before" aria-hidden="true">
+          <div class="art-slot" data-art-slot="before"></div>
+        </div>
+        <div class="compare__layer compare__layer--after" data-after aria-hidden="true">
+          <div class="art-slot" data-art-slot="after"></div>
+        </div>
+        <div class="compare__line" data-line></div>
+        <div class="compare__tag compare__tag--before">Before</div>
+        <div class="compare__tag compare__tag--after">After</div>
+      </div>
+      <button class="compare__handle" type="button" data-handle role="slider" aria-label="Before and after reveal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent after">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 7L3 12l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 7l5 5-5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 4v16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<template id="artBefore">
+  <div class="art art--desktop">
+    <svg viewBox="0 0 1280 800" role="img" aria-label="Plain Mosswell product scene before redesign">
+      <rect width="1280" height="800" fill="#eef0ec"/>
+      <rect x="82" y="84" width="1116" height="632" rx="10" fill="#f7f7f3" stroke="#dfe3de"/>
+      <rect x="142" y="146" width="424" height="508" rx="8" fill="#fff" stroke="#e4e5e0"/>
+      <rect x="190" y="188" width="328" height="310" fill="#f2f2ee"/>
+      <ellipse cx="356" cy="556" rx="144" ry="30" fill="#d9ddd8"/>
+      <rect x="290" y="232" width="132" height="220" rx="32" fill="#e7aaa0"/>
+      <rect x="318" y="154" width="76" height="110" rx="22" fill="#f8f5ef"/>
+      <rect x="314" y="306" width="84" height="76" fill="#fffaf7"/>
+      <text x="330" y="338" fill="#17211d" font-size="15" font-weight="800">Barrier</text>
+      <text x="336" y="360" fill="#17211d" font-size="15">Serum</text>
+      <rect x="190" y="526" width="90" height="78" fill="#f7f3ee" stroke="#e3e0da"/>
+      <rect x="310" y="526" width="90" height="78" fill="#f7f3ee" stroke="#e3e0da"/>
+      <rect x="430" y="526" width="90" height="78" fill="#f7f3ee" stroke="#e3e0da"/>
+      <rect x="650" y="150" width="430" height="62" fill="#fff" stroke="#d8ddd8"/>
+      <rect x="650" y="244" width="430" height="62" fill="#fff" stroke="#d8ddd8"/>
+      <rect x="650" y="338" width="430" height="62" fill="#fff" stroke="#d8ddd8"/>
+      <rect x="650" y="454" width="430" height="72" fill="#202020"/>
+      <text x="792" y="500" fill="#fff" font-size="20" font-weight="800">ADD TO CART</text>
+      <line x1="650" y1="574" x2="1080" y2="574" stroke="#d8ddd8"/>
+      <line x1="650" y1="626" x2="1080" y2="626" stroke="#d8ddd8"/>
+    </svg>
+  </div>
+  <div class="art art--mobile">
+    <svg viewBox="0 0 390 520" role="img" aria-label="Plain Mosswell mobile product scene before redesign">
+      <rect width="390" height="520" fill="#eef0ec"/>
+      <rect x="30" y="42" width="330" height="430" rx="10" fill="#f8f8f4" stroke="#dfe3de"/>
+      <rect x="70" y="78" width="250" height="234" fill="#fff" stroke="#e5e6e0"/>
+      <ellipse cx="195" cy="336" rx="98" ry="24" fill="#d9ddd8"/>
+      <rect x="150" y="132" width="90" height="152" rx="24" fill="#e6aaa0"/>
+      <rect x="170" y="78" width="50" height="82" rx="16" fill="#f8f5ef"/>
+      <rect x="166" y="188" width="58" height="56" fill="#fffaf7"/>
+      <text x="176" y="218" fill="#17211d" font-size="11" font-weight="800">Barrier</text>
+      <text x="180" y="234" fill="#17211d" font-size="11">Serum</text>
+      <rect x="70" y="370" width="250" height="34" fill="#fff" stroke="#d4d9d4"/>
+      <rect x="70" y="420" width="250" height="34" fill="#fff" stroke="#d4d9d4"/>
+    </svg>
+  </div>
+</template>
+
+<template id="artAfter">
+  <div class="art art--desktop">
+    <svg viewBox="0 0 1280 800" role="img" aria-label="Polished Mosswell product scene after redesign">
+      <rect width="1280" height="800" fill="#fff8ee"/>
+      <circle cx="170" cy="110" r="156" fill="#dce8dc"/>
+      <circle cx="1120" cy="654" r="210" fill="#f3d7ca"/>
+      <rect x="82" y="84" width="1116" height="632" rx="14" fill="#fffdf7" stroke="#e7d9c7"/>
+      <path d="M150 178c82-78 218-74 296 4-88 100-222 112-296-4Z" fill="#eab6a8"/>
+      <circle cx="390" cy="150" r="14" fill="#f6d6cc"/>
+      <circle cx="426" cy="198" r="18" fill="#efc1b4"/>
+      <rect x="510" y="162" width="250" height="416" rx="54" fill="#e8a394"/>
+      <rect x="560" y="54" width="150" height="168" rx="36" fill="#fff8f0"/>
+      <rect x="552" y="304" width="166" height="128" fill="#fffaf6"/>
+      <text x="594" y="354" fill="#17211d" font-size="24" font-weight="800">Barrier</text>
+      <text x="602" y="388" fill="#17211d" font-size="22">Serum</text>
+      <ellipse cx="635" cy="624" rx="280" ry="42" fill="#ead8c4"/>
+      <rect x="220" y="520" width="96" height="140" rx="24" fill="#e9b2a6"/>
+      <rect x="344" y="462" width="132" height="198" rx="30" fill="#f0c1b5"/>
+      <rect x="820" y="170" width="280" height="100" rx="10" fill="#e8f1ea"/>
+      <text x="866" y="232" fill="#476856" font-size="28" font-weight="820">Fragrance free</text>
+      <rect x="820" y="310" width="280" height="100" rx="10" fill="#f4e2d7"/>
+      <text x="872" y="372" fill="#8c5f4f" font-size="28" font-weight="820">Calm finish</text>
+      <rect x="820" y="450" width="280" height="100" rx="10" fill="#edf4ef"/>
+      <text x="870" y="512" fill="#476856" font-size="28" font-weight="820">Daily ritual</text>
+    </svg>
+  </div>
+  <div class="art art--mobile">
+    <svg viewBox="0 0 390 520" role="img" aria-label="Polished Mosswell mobile product scene after redesign">
+      <rect width="390" height="520" fill="#fff8ee"/>
+      <circle cx="78" cy="76" r="88" fill="#dce8dc"/>
+      <circle cx="338" cy="438" r="112" fill="#f3d7ca"/>
+      <rect x="30" y="42" width="330" height="430" rx="12" fill="#fffdf7" stroke="#e7d9c7"/>
+      <path d="M48 134c42-40 110-38 150 2-44 50-112 56-150-2Z" fill="#eab6a8"/>
+      <circle cx="170" cy="118" r="8" fill="#f6d6cc"/>
+      <rect x="148" y="158" width="96" height="180" rx="28" fill="#e8a394"/>
+      <rect x="168" y="96" width="56" height="88" rx="18" fill="#fff8f0"/>
+      <rect x="166" y="224" width="58" height="58" fill="#fffaf6"/>
+      <text x="176" y="256" fill="#17211d" font-size="12" font-weight="800">Barrier</text>
+      <ellipse cx="196" cy="366" rx="134" ry="28" fill="#ead8c4"/>
+      <rect x="72" y="392" width="72" height="54" rx="8" fill="#e8f1ea"/>
+      <rect x="160" y="392" width="72" height="54" rx="8" fill="#f4e2d7"/>
+      <rect x="248" y="392" width="72" height="54" rx="8" fill="#edf4ef"/>
+    </svg>
+  </div>
+</template>
+
+<script>
+  const app = document.getElementById('app');
+  const modal = document.getElementById('modal');
+  const openButton = document.querySelector('[data-open-modal]');
+  const closeButton = document.querySelector('[data-close-modal]');
+  const sliders = new Map();
+  let lastFocus = null;
+
+  function fillArtwork(root) {
+    root.querySelector('[data-art-slot="before"]').appendChild(document.getElementById('artBefore').content.cloneNode(true));
+    root.querySelector('[data-art-slot="after"]').appendChild(document.getElementById('artAfter').content.cloneNode(true));
+  }
+
+  function initCompare(root) {
+    fillArtwork(root);
+
+    const key = root.dataset.compare;
+    const after = root.querySelector('[data-after]');
+    const line = root.querySelector('[data-line]');
+    const media = root.querySelector('[data-media]');
+    const handle = root.querySelector('[data-handle]');
+    const readout = document.querySelector(`[data-readout="${key}"]`);
+    let dragging = false;
+    let pos = 50;
+
+    function setPos(next) {
+      pos = Math.max(0, Math.min(100, next));
+      after.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
+      line.style.left = `${pos}%`;
+      handle.style.left = `${pos}%`;
+      handle.setAttribute('aria-valuenow', String(Math.round(pos)));
+      handle.setAttribute('aria-valuetext', `${Math.round(pos)} percent after`);
+      if (readout) readout.textContent = `${Math.round(pos)}% after`;
+    }
+
+    function moveTo(clientX) {
+      const rect = media.getBoundingClientRect();
+      setPos(((clientX - rect.left) / rect.width) * 100);
+    }
+
+    handle.addEventListener('pointerdown', (event) => {
+      dragging = true;
+      event.preventDefault();
+      handle.setPointerCapture?.(event.pointerId);
+    });
+
+    handle.addEventListener('pointermove', (event) => {
+      if (dragging) moveTo(event.clientX);
+    });
+
+    function stopDrag(event) {
+      dragging = false;
+      if (event?.pointerId !== undefined) handle.releasePointerCapture?.(event.pointerId);
+    }
+
+    handle.addEventListener('pointerup', stopDrag);
+    handle.addEventListener('pointercancel', stopDrag);
+
+    handle.addEventListener('keydown', (event) => {
+      const moves = {
+        ArrowLeft: -4,
+        ArrowDown: -4,
+        ArrowRight: 4,
+        ArrowUp: 4,
+        PageDown: -12,
+        PageUp: 12
+      };
+
+      if (event.key in moves) {
+        event.preventDefault();
+        setPos(pos + moves[event.key]);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        setPos(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        setPos(100);
+      }
+    });
+
+    setPos(pos);
+    const api = { setPos, getPos: () => pos, focus: () => handle.focus() };
+    sliders.set(key, api);
+    return api;
+  }
+
+  document.querySelectorAll('[data-compare]').forEach(initCompare);
+
+  document.querySelectorAll('[data-reset]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const slider = sliders.get(button.dataset.reset);
+      slider?.setPos(50);
+      slider?.focus();
+    });
+  });
+
+  function modalFocusables() {
+    return [...modal.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])')]
+      .filter((el) => !el.disabled && el.offsetParent !== null);
+  }
+
+  function openModal() {
+    lastFocus = document.activeElement;
+    sliders.get('modal')?.setPos(sliders.get('main')?.getPos() ?? 50);
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    app.setAttribute('inert', '');
+    document.body.style.overflow = 'hidden';
+    closeButton.focus();
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    app.removeAttribute('inert');
+    document.body.style.overflow = '';
+    if (lastFocus?.focus) lastFocus.focus();
+  }
+
+  openButton.addEventListener('click', openModal);
+  closeButton.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) closeModal();
+  });
+
+  modal.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+
+    if (event.key !== 'Tab') return;
+
+    const focusables = modalFocusables();
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+</script>
+</body>
+</html>
