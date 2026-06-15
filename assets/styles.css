@@ -992,8 +992,8 @@ a {
 
   .premium-title {
     max-width: calc(100vw - 24px);
-    font-size: 39px;
-    line-height: 1.02;
+    font-size: 33px;
+    line-height: 1.04;
     overflow-wrap: break-word;
   }
 
@@ -1006,44 +1006,52 @@ a {
   }
 
   .premium-subtitle {
-    max-width: 36ch;
+    max-width: 38ch;
   }
 
-  /* Body text under the big title was too small to read on phones. */
+  /* Body text under the title was too small to read on phones — sized up
+     hard so it fills the space and is comfortably legible. */
   .premium-subtitle {
-    font-size: 18px;
+    font-size: 22px;
+    line-height: 1.6;
+    margin-top: 16px;
   }
 
   .premium-kicker {
-    font-size: 17px;
+    font-size: 19px;
   }
 
   .premium-rating {
-    font-size: 17px;
+    font-size: 19px;
   }
 
   .premium-price {
-    font-size: 27px;
+    font-size: 32px;
   }
 
   .premium-size {
-    font-size: 16px;
-  }
-
-  .premium-selector button {
-    font-size: 16px;
-  }
-
-  .premium-trust {
-    font-size: 16px;
-  }
-
-  .premium-benefit strong {
     font-size: 18px;
   }
 
+  .premium-selector button {
+    font-size: 18px;
+    min-height: 54px;
+  }
+
+  .premium-trust {
+    font-size: 18px;
+  }
+
+  .premium-trust span {
+    min-height: 64px;
+  }
+
+  .premium-benefit strong {
+    font-size: 22px;
+  }
+
   .premium-benefit p {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .premium-buy {
