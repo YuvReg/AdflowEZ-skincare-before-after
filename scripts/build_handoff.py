@@ -107,7 +107,7 @@ HTML = f"""<!doctype html>
     .modal__content {{ width:auto; max-width:96vw; }}
     .card2 {{ overflow:hidden; max-height:none; width:max-content; margin:0 auto; }}
     .card2 .ba {{ display:inline-block; width:auto; }}
-    .card2 .ba__before img {{ width:auto; height:auto; max-height:84vh; max-width:96vw; }}
+    .card2 .ba__before img {{ width:auto; height:auto; max-height:90vh; max-width:96vw; }}
   }}
   .resizehint {{ text-align:center; font-size:12px; color:#94a3b8; margin-top:10px; }}
 

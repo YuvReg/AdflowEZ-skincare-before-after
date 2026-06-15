@@ -18,7 +18,8 @@
       "Bash(node scripts/_peek50.js)",
       "Bash(git add *)",
       "Bash(git -c user.name=YuvReg -c user.email=yuval@adflowez.com commit -q -m '@ *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(curl -s --max-time 30 https://yuvreg.github.io/tol-slider-preview/slider.html -o tmp/ref-slider.html)"
     ]
   }
 }
