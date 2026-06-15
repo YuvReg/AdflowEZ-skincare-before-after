@@ -4,3 +4,4 @@ dist/
 screenshots/generated/
 tmp/
 *.exe
+_gen/.codex-write-test
