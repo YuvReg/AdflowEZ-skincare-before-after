@@ -21,15 +21,15 @@
   .brand{ display:flex; align-items:center; justify-content:center; gap:10px; flex:0 0 auto; }
   .brand img{ height:22px; width:auto; }
 
-  .main{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:11px; margin-top:11px; }
+  .main{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:8px; margin-top:8px; }
 
   /* gallery: hero fills remaining space, thumb row pinned under it */
-  .gallery{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:7px; }
+  .gallery{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:6px; }
   .hero-img{ flex:1 1 auto; min-height:0; border-radius:15px; overflow:hidden;
              border:1px solid var(--line); box-shadow:0 16px 32px rgba(60,45,25,.17); }
   .hero-img img{ width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block; }
   .thumbs{ flex:0 0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
-  .thumbs figure{ margin:0; aspect-ratio:1; border-radius:10px; overflow:hidden; border:1px solid var(--line); }
+  .thumbs figure{ margin:0; height:74px; border-radius:10px; overflow:hidden; border:1px solid var(--line); }
   .thumbs img{ width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
 
   .info{ flex:0 0 auto; }
@@ -37,17 +37,20 @@
   .title{ margin:0; font-family:'Playfair Display',Georgia,serif; font-weight:600; line-height:.98; font-size:25px; letter-spacing:-.01em; }
   .rating{ display:flex; align-items:center; gap:7px; margin:6px 0 0; color:var(--muted); font-size:12px; }
   .stars{ color:var(--brass); letter-spacing:2px; }
-  .benefits{ list-style:none; margin:9px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:6px; }
+  .benefits{ list-style:none; margin:7px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:6px; }
   .benefits li{ font-size:11.5px; font-weight:500; color:#4a4034; background:#fff;
                 border:1px solid var(--line); border-radius:999px; padding:4px 10px 4px 8px;
                 display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(60,45,25,.06); }
   .benefits svg{ width:12px; height:12px; flex:0 0 auto; }
-  .buy{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:11px; }
-  .price{ font-size:23px; font-weight:700; font-variant-numeric:tabular-nums; }
+  /* price on its own line ABOVE a full-width Add-to-cart bar (CRO consensus:
+     full-width = label centered, no dead gap, biggest tap target, single clear action) */
+  .buy{ display:flex; flex-direction:column; align-items:stretch; gap:9px; margin-top:9px; }
+  .price{ font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; }
   .cta{ appearance:none; border:none; cursor:pointer; background:var(--ink); color:#fff; font-family:inherit;
-        font-weight:600; font-size:14px; padding:12px 19px; border-radius:999px; display:inline-flex; align-items:center; gap:8px;
-        box-shadow:0 10px 24px rgba(43,39,34,.26); }
-  .cta svg{ width:16px; height:16px; }
+        font-weight:600; font-size:16px; padding:14px 18px; border-radius:14px; width:100%;
+        display:flex; align-items:center; justify-content:center; gap:9px;
+        box-shadow:0 8px 20px rgba(43,39,34,.20); }
+  .cta svg{ width:19px; height:19px; }
 
   /* Desktop / landscape (1280x670): gallery (hero + vertical thumbs) left, info right. */
   @media (min-width:640px){
@@ -58,7 +61,7 @@
     .gallery{ flex:1 1 54%; flex-direction:row; height:82%; gap:10px; }
     .hero-img{ flex:1 1 auto; height:100%; }
     .thumbs{ flex:0 0 96px; grid-template-columns:1fr; grid-auto-rows:1fr; height:100%; }
-    .thumbs figure{ aspect-ratio:auto; }
+    .thumbs figure{ aspect-ratio:auto; height:auto; }
     .info{ flex:1 1 46%; }
     .kicker{ font-size:13px; }
     .title{ font-size:48px; }
@@ -66,9 +69,9 @@
     .benefits{ margin-top:16px; gap:8px; }
     .benefits li{ font-size:13px; padding:6px 13px 6px 11px; }
     .benefits svg{ width:14px; height:14px; }
-    .price{ font-size:29px; }
-    .cta{ font-size:15px; padding:14px 24px; }
-    .buy{ margin-top:20px; }
+    .price{ font-size:30px; }
+    .cta{ font-size:18px; padding:18px 26px; border-radius:15px; }
+    .buy{ margin-top:18px; gap:13px; }
   }
 </style>
 </head>
