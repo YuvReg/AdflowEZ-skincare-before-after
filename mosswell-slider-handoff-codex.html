@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mosswell Before/After - Codex</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --ink: #111827;
+    --muted: #64748b;
+    --line: #dbe3ef;
+    --blue: #2563eb;
+    --green: #10b981;
+    --shadow: 0 20px 55px rgba(15, 23, 42, .14);
+    --ratio: 1280 / 1222;
+    --page-chrome: 218px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  body.is-modal-open .app { filter: blur(1px); }
+
+  button {
+    min-height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  button:hover { border-color: #b7c4d8; background: #f8fafc; }
+  button:focus-visible, .comparison:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .28);
+    outline-offset: 3px;
+  }
+
+  .app {
+    height: 100svh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 14px;
+    padding: 22px clamp(14px, 3vw, 34px) 18px;
+  }
+
+  .hero {
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .sub {
+    margin: 8px auto 0;
+    max-width: 660px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .stage {
+    min-height: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .comparison {
+    --pos: 50;
+    position: relative;
+    width: min(100%, calc((100svh - var(--page-chrome)) * var(--ratio)), 980px);
+    aspect-ratio: var(--ratio);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: var(--shadow);
+    touch-action: none;
+    user-select: none;
+  }
+
+  .shot {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+
+  .shot img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .shot--after {
+    clip-path: inset(0 0 0 50%);
+    z-index: 2;
+  }
+
+  .badge {
+    position: absolute;
+    z-index: 5;
+    top: 12px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0 12px;
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid rgba(203, 213, 225, .92);
+    color: #334155;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, .12);
+  }
+
+  .badge--before { left: 12px; }
+  .badge--after { right: 12px; }
+
+  .divider {
+    position: absolute;
+    z-index: 6;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: #fff;
+    transform: translateX(-1px);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, .16), 0 0 18px rgba(15, 23, 42, .28);
+    pointer-events: none;
+  }
+
+  .handle {
+    position: absolute;
+    z-index: 7;
+    top: 50%;
+    left: 50%;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    box-shadow: 0 12px 28px rgba(15, 23, 42, .28);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    cursor: ew-resize;
+  }
+
+  .controls {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    padding: 0 15px;
+  }
+
+  .controls .primary {
+    color: #fff;
+    border-color: transparent;
+    background: var(--blue);
+  }
+
+  .controls .primary:hover { background: #1d4ed8; }
+
+  .value {
+    min-width: 94px;
+    text-align: center;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .modal {
+    position: fixed;
+    z-index: 20;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 16px;
+    background: rgba(15, 23, 42, .78);
+  }
+
+  .modal[hidden] { display: none; }
+
+  .modal__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: #fff;
+  }
+
+  .modal__title {
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .modal__close {
+    width: 44px;
+    padding: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, .12);
+    border-color: rgba(255, 255, 255, .26);
+  }
+
+  .modal__stage {
+    min-height: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .modal .comparison {
+    width: min(calc(100vw - 32px), calc((100svh - 128px) * var(--ratio)), 1200px);
+    max-height: calc(100svh - 128px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .42);
+  }
+
+  .modal .controls button {
+    background: rgba(255, 255, 255, .96);
+  }
+
+  .modal .controls .primary {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .modal .value { color: #e2e8f0; }
+
+  @media (max-width: 680px) {
+    :root { --page-chrome: 248px; }
+    .app { padding: 14px 12px 12px; gap: 10px; }
+    h1 { font-size: 23px; }
+    .sub { font-size: 13px; line-height: 1.35; margin-top: 6px; }
+    .comparison { width: min(100%, calc((100svh - var(--page-chrome)) * var(--ratio))); }
+    .badge { top: 8px; min-height: 28px; padding: 0 9px; font-size: 11px; }
+    .badge--before { left: 8px; }
+    .badge--after { right: 8px; }
+    .handle { width: 48px; height: 48px; }
+    .controls { gap: 6px; min-height: 104px; align-content: center; }
+    .controls button { padding: 0 12px; }
+    .value { width: 100%; order: -1; }
+    .modal { padding: 10px; gap: 8px; }
+    .modal__title { font-size: 13px; }
+    .modal .comparison {
+      width: min(calc(100vw - 20px), calc((100svh - 162px) * var(--ratio)));
+      max-height: calc(100svh - 162px);
+    }
+  }
+
+  @media (max-height: 720px) {
+    :root { --page-chrome: 198px; }
+    .app { padding-top: 10px; padding-bottom: 10px; gap: 8px; }
+    .sub { display: none; }
+    h1 { font-size: 22px; }
+    .controls { min-height: 48px; }
+    .controls button { min-height: 42px; }
+    .modal .comparison {
+      width: min(calc(100vw - 20px), calc((100svh - 104px) * var(--ratio)));
+      max-height: calc(100svh - 104px);
+    }
+  }
+</style>
+</head>
+<body>
+<main class="app" id="app">
+  <header class="hero">
+    <h1>Mosswell Before / After</h1>
+    <p class="sub">Full product screenshots in a contained comparison view. Nothing is cropped in the regular or expanded state.</p>
+  </header>
+
+  <section class="stage" aria-label="Before and after comparison">
+    <div class="comparison" data-comparison role="slider" tabindex="0" aria-label="Before and after reveal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <figure class="shot shot--before">
+        <img src="mosswell-before-codex.png" alt="Before screenshot" draggable="false">
+      </figure>
+      <figure class="shot shot--after" data-after>
+        <img src="mosswell-after-codex.png" alt="After screenshot" draggable="false">
+      </figure>
+      <span class="badge badge--before">Before</span>
+      <span class="badge badge--after">After</span>
+      <span class="divider" data-divider></span>
+      <button class="handle" type="button" data-handle aria-label="Drag to compare">&#8596;</button>
+    </div>
+  </section>
+
+  <nav class="controls" aria-label="Comparison controls">
+    <button type="button" data-set="0">Before</button>
+    <button type="button" data-reset aria-label="Reset comparison">Reset</button>
+    <span class="value" data-value>50% after</span>
+    <button type="button" data-set="100">After</button>
+    <button class="primary" type="button" data-expand>Expand</button>
+  </nav>
+</main>
+
+<section class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal__bar">
+    <div class="modal__title" id="modal-title">Expanded Mosswell comparison</div>
+    <button class="modal__close" type="button" data-close aria-label="Close expanded view">X</button>
+  </div>
+
+  <div class="modal__stage">
+    <div class="comparison" data-comparison role="slider" tabindex="0" aria-label="Expanded before and after reveal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <figure class="shot shot--before">
+        <img src="mosswell-before-codex.png" alt="Before screenshot enlarged" draggable="false">
+      </figure>
+      <figure class="shot shot--after" data-after>
+        <img src="mosswell-after-codex.png" alt="After screenshot enlarged" draggable="false">
+      </figure>
+      <span class="badge badge--before">Before</span>
+      <span class="badge badge--after">After</span>
+      <span class="divider" data-divider></span>
+      <button class="handle" type="button" data-handle aria-label="Drag to compare enlarged view">&#8596;</button>
+    </div>
+  </div>
+
+  <nav class="controls" aria-label="Expanded comparison controls">
+    <button type="button" data-set="0">Before</button>
+    <button type="button" data-reset>Reset</button>
+    <span class="value" data-value>50% after</span>
+    <button type="button" data-set="100">After</button>
+    <button class="primary" type="button" data-close>Done</button>
+  </nav>
+</section>
+
+<script>
+(() => {
+  const app = document.getElementById('app');
+  const modal = document.getElementById('modal');
+  const closeButtons = modal.querySelectorAll('[data-close]');
+  const expandButton = document.querySelector('[data-expand]');
+  let lastFocus = null;
+
+  function clamp(value) {
+    return Math.max(0, Math.min(100, value));
+  }
+
+  function wireComparison(root) {
+    const comparison = root.querySelector('[data-comparison]');
+    const after = comparison.querySelector('[data-after]');
+    const divider = comparison.querySelector('[data-divider]');
+    const handle = comparison.querySelector('[data-handle]');
+    const controlsRoot = root.classList.contains('modal') ? root : document;
+    const valueLabels = controlsRoot.querySelectorAll('[data-value]');
+    let pos = 50;
+    let dragging = false;
+
+    function apply(next) {
+      pos = clamp(next);
+      after.style.clipPath = `inset(0 0 0 ${100 - pos}%)`;
+      divider.style.left = `${pos}%`;
+      handle.style.left = `${pos}%`;
+      comparison.setAttribute('aria-valuenow', String(Math.round(pos)));
+      valueLabels.forEach(label => {
+        label.textContent = `${Math.round(pos)}% after`;
+      });
+    }
+
+    function positionFromEvent(event) {
+      const rect = comparison.getBoundingClientRect();
+      return ((event.clientX - rect.left) / rect.width) * 100;
+    }
+
+    handle.addEventListener('pointerdown', event => {
+      dragging = true;
+      handle.setPointerCapture(event.pointerId);
+      apply(positionFromEvent(event));
+    });
+
+    handle.addEventListener('pointermove', event => {
+      if (!dragging) return;
+      apply(positionFromEvent(event));
+    });
+
+    handle.addEventListener('pointerup', event => {
+      dragging = false;
+      if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    });
+
+    comparison.addEventListener('keydown', event => {
+      const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'];
+      if (!keys.includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'Home') apply(0);
+      if (event.key === 'End') apply(100);
+      if (event.key === 'ArrowLeft') apply(pos - 5);
+      if (event.key === 'ArrowRight') apply(pos + 5);
+      if (event.key === 'PageDown') apply(pos - 10);
+      if (event.key === 'PageUp') apply(pos + 10);
+    });
+
+    controlsRoot.querySelectorAll('[data-set]').forEach(button => {
+      button.addEventListener('click', () => apply(Number(button.dataset.set)));
+    });
+
+    controlsRoot.querySelectorAll('[data-reset]').forEach(button => {
+      button.addEventListener('click', () => apply(50));
+    });
+
+    apply(50);
+    return { apply };
+  }
+
+  const normal = wireComparison(document);
+  const expanded = wireComparison(modal);
+
+  function openModal() {
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    app.inert = true;
+    document.body.classList.add('is-modal-open');
+    expanded.apply(50);
+    modal.querySelector('[data-close]').focus();
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    app.inert = false;
+    document.body.classList.remove('is-modal-open');
+    normal.apply(50);
+    if (lastFocus) lastFocus.focus();
+  }
+
+  expandButton.addEventListener('click', openModal);
+  closeButtons.forEach(button => button.addEventListener('click', closeModal));
+
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeModal();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (modal.hidden) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeModal();
+    }
+    if (event.key === 'Tab') {
+      const focusables = [...modal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])')]
+        .filter(el => !el.disabled && el.offsetParent !== null);
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -14,13 +14,14 @@ SHOTS = ROOT / "screenshots"
 
 def data_uri(name):
     b = (SHOTS / name).read_bytes()
-    return "data:image/png;base64," + base64.b64encode(b).decode("ascii")
+    mime = "image/jpeg" if name.endswith((".jpg", ".jpeg")) else "image/png"
+    return f"data:{mime};base64," + base64.b64encode(b).decode("ascii")
 
 imgs = {
-    "bd": data_uri("before-desktop.png"),
-    "ad": data_uri("after-desktop.png"),
-    "bm": data_uri("before-mobile.png"),
-    "am": data_uri("after-mobile.png"),
+    "bd": data_uri("before-desktop.jpg"),
+    "ad": data_uri("after-desktop.jpg"),
+    "bm": data_uri("before-mobile.jpg"),
+    "am": data_uri("after-mobile.jpg"),
 }
 
 component_src = (ROOT / "components" / "BeforeAfter.jsx").read_text(encoding="utf-8")
@@ -31,10 +32,10 @@ usage_snippet = '''import BeforeAfter from '@/components/BeforeAfter';
 // <div className="relative w-full aspect-video ...">...</div> with:
 
 <BeforeAfter
-  beforeSrc="/demos/mosswell-before.png"
-  afterSrc="/demos/mosswell-after.png"
-  beforeSrcMobile="/demos/mosswell-before-mobile.png"
-  afterSrcMobile="/demos/mosswell-after-mobile.png"
+  beforeSrc="/demos/mosswell-before.jpg"
+  afterSrc="/demos/mosswell-after.jpg"
+  beforeSrcMobile="/demos/mosswell-before-mobile.jpg"
+  afterSrcMobile="/demos/mosswell-after-mobile.jpg"
   beforeAlt="Mosswell — original product page"
   afterAlt="Mosswell — AdflowEZ rebuild"
 />'''
@@ -190,10 +191,10 @@ HTML = f"""<!doctype html>
     <h2>2 · Download the photos</h2>
     <p class="note" style="margin-top:0">Put all four in your project's <code>public/demos/</code> folder. Desktop = 16:9 product page, Mobile = phone product page.</p>
     <div class="grid">
-      <div class="dl"><img src="{imgs['bd']}" alt=""><div class="lbl">Before · desktop (1280×1000)</div><a class="btn" download="mosswell-before.png" href="{imgs['bd']}">Download</a></div>
-      <div class="dl"><img src="{imgs['ad']}" alt=""><div class="lbl">After · desktop (1280×1000)</div><a class="btn" download="mosswell-after.png" href="{imgs['ad']}">Download</a></div>
-      <div class="dl"><img src="{imgs['bm']}" alt=""><div class="lbl">Before · mobile (390×1080)</div><a class="btn" download="mosswell-before-mobile.png" href="{imgs['bm']}">Download</a></div>
-      <div class="dl"><img src="{imgs['am']}" alt=""><div class="lbl">After · mobile (390×1080)</div><a class="btn" download="mosswell-after-mobile.png" href="{imgs['am']}">Download</a></div>
+      <div class="dl"><img src="{imgs['bd']}" alt=""><div class="lbl">Before · desktop (2x)</div><a class="btn" download="mosswell-before.jpg" href="{imgs['bd']}">Download</a></div>
+      <div class="dl"><img src="{imgs['ad']}" alt=""><div class="lbl">After · desktop (2x)</div><a class="btn" download="mosswell-after.jpg" href="{imgs['ad']}">Download</a></div>
+      <div class="dl"><img src="{imgs['bm']}" alt=""><div class="lbl">Before · mobile (2x)</div><a class="btn" download="mosswell-before-mobile.jpg" href="{imgs['bm']}">Download</a></div>
+      <div class="dl"><img src="{imgs['am']}" alt=""><div class="lbl">After · mobile (2x)</div><a class="btn" download="mosswell-after-mobile.jpg" href="{imgs['am']}">Download</a></div>
     </div>
   </div>
 
