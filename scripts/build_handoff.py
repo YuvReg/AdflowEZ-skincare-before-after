@@ -80,6 +80,11 @@ HTML = f"""<!doctype html>
   .ba__handle:focus {{ outline:2px solid var(--blue); outline-offset:2px; }}
   .ba__handle::before {{ content:''; position:absolute; inset:-7px; border-radius:9999px; border:2px solid rgba(59,124,244,.55); animation:tolPulse 1.8s ease-out infinite; pointer-events:none; }}
   @keyframes tolPulse {{ 0%{{transform:scale(.9);opacity:.7}} 70%{{transform:scale(1.3);opacity:0}} 100%{{opacity:0}} }}
+  /* handle glyph: left chevron + hand + right chevron (signals drag left/right) */
+  .hrow {{ display:flex; align-items:center; gap:3px; }}
+  .hrow svg {{ display:block; fill:none; stroke:var(--blue); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }}
+  .hhand {{ width:13px; height:13px; }}
+  .hchev {{ width:7px; height:12px; }}
   .ba__tag {{ position:absolute; top:12px; font-size:12px; font-weight:600; padding:4px 10px; border-radius:6px; color:#fff; pointer-events:none; }}
   .ba__tag--before {{ left:12px; background:rgba(0,0,0,.5); }}
   .ba__tag--after  {{ right:12px; background:var(--blue); }}
@@ -145,12 +150,16 @@ HTML = f"""<!doctype html>
         <div class="ba__line" id="baLine"></div>
         <div class="ba__handle" id="baHandle" role="slider" tabindex="0"
              aria-label="Drag to compare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B7CF4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
-            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
-            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
-            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
-          </svg>
+          <span class="hrow">
+            <svg class="hchev" viewBox="0 0 10 16"><path d="M8 2 2 8 8 14"/></svg>
+            <svg class="hhand" viewBox="0 0 24 24">
+              <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+              <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
+              <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
+              <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+            </svg>
+            <svg class="hchev" viewBox="0 0 10 16"><path d="M2 2 8 8 2 14"/></svg>
+          </span>
         </div>
         <div class="ba__tag ba__tag--before">Before</div>
         <div class="ba__tag ba__tag--after">After</div>
