@@ -12,7 +12,13 @@
       "PowerShell(gh auth status)",
       "PowerShell(node scripts/mobile-review.js)",
       "Bash(node scripts/mobile-review.js)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}, %{size_download} bytes\\\\n\" https://2dacf659fc29d7.lhr.life/mosswell-slider-handoff.html)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}, %{size_download} bytes\\\\n\" https://2dacf659fc29d7.lhr.life/mosswell-slider-handoff.html)",
+      "Bash(python scripts/build_handoff.py)",
+      "Bash(node scripts/_modal.js)",
+      "Bash(node scripts/_peek50.js)",
+      "Bash(git add *)",
+      "Bash(git -c user.name=YuvReg -c user.email=yuval@adflowez.com commit -q -m '@ *)",
+      "Bash(git push *)"
     ]
   }
 }

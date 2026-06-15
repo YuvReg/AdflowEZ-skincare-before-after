@@ -96,6 +96,14 @@ HTML = f"""<!doctype html>
   .modal__close {{ position:absolute; top:-40px; right:0; background:none; border:none; color:#fff; font-size:14px;
                    font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; }}
   .card2 {{ border-radius:12px; overflow:auto; max-height:88vh; box-shadow:0 20px 60px rgba(0,0,0,.5); }}
+  /* DESKTOP expand: scale the whole comparison to fit the screen height — no scrolling.
+     (Mobile keeps the scroll-in-frame behaviour above, untouched.) */
+  @media(min-width:640px){{
+    .modal__content {{ width:auto; max-width:96vw; }}
+    .card2 {{ overflow:hidden; max-height:none; width:max-content; margin:0 auto; }}
+    .card2 .ba {{ display:inline-block; width:auto; }}
+    .card2 .ba__before img {{ width:auto; height:auto; max-height:84vh; max-width:96vw; }}
+  }}
   .resizehint {{ text-align:center; font-size:12px; color:#94a3b8; margin-top:10px; }}
 
   /* ---------- downloads ---------- */
