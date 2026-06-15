@@ -381,7 +381,7 @@ a {
 .premium-kicker {
   margin: 0 0 14px;
   color: var(--sage-ink);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .premium-title {
@@ -400,7 +400,7 @@ a {
   margin: 20px 0 0;
   max-width: 58ch;
   color: var(--muted);
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.7;
 }
 
@@ -411,6 +411,7 @@ a {
   align-items: center;
   margin: 24px 0;
   color: var(--muted);
+  font-size: 16px;
 }
 
 .stars {
@@ -480,7 +481,7 @@ a {
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   color: var(--sage-ink);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .premium-trust span {
@@ -512,12 +513,14 @@ a {
 .premium-benefit strong {
   display: block;
   margin-bottom: 8px;
+  font-size: 17px;
 }
 
 .premium-benefit p {
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
+  font-size: 15.5px;
 }
 
 .story-band {
@@ -1003,10 +1006,43 @@ a {
   }
 
   .premium-subtitle {
-    max-width: 32ch;
+    max-width: 36ch;
   }
 
+  /* Body text under the big title was too small to read on phones. */
   .premium-subtitle {
+    font-size: 18px;
+  }
+
+  .premium-kicker {
+    font-size: 17px;
+  }
+
+  .premium-rating {
+    font-size: 17px;
+  }
+
+  .premium-price {
+    font-size: 27px;
+  }
+
+  .premium-size {
+    font-size: 16px;
+  }
+
+  .premium-selector button {
+    font-size: 16px;
+  }
+
+  .premium-trust {
+    font-size: 16px;
+  }
+
+  .premium-benefit strong {
+    font-size: 18px;
+  }
+
+  .premium-benefit p {
     font-size: 16px;
   }
 

@@ -19,7 +19,11 @@
       "Bash(git add *)",
       "Bash(git -c user.name=YuvReg -c user.email=yuval@adflowez.com commit -q -m '@ *)",
       "Bash(git push *)",
-      "Bash(curl -s --max-time 30 https://yuvreg.github.io/tol-slider-preview/slider.html -o tmp/ref-slider.html)"
+      "Bash(curl -s --max-time 30 https://yuvreg.github.io/tol-slider-preview/slider.html -o tmp/ref-slider.html)",
+      "WebFetch(domain:yuvreg.github.io)",
+      "Bash(node tmp/verify-handoff.js)",
+      "Bash(rm -f tmp/verify-handoff.js tmp/v-*.png)",
+      "Bash(git -C c:/AdflowEZ-skincare-before-after status --short)"
     ]
   }
 }
